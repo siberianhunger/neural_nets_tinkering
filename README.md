@@ -22,6 +22,12 @@ and after the measured section, and then runs `a @ b`. For two-dimensional
 tensors, `@` dispatches to PyTorch matrix multiplication. On CUDA tensors, that
 operation is scheduled on the GPU rather than executed by the Python interpreter.
 
+Resource usage: Python still runs on the CPU to create tensors, issue PyTorch
+calls, and print results, but the measured matrix multiplication runs on the
+NVIDIA GPU through CUDA. GPU device memory stores the tensors after `.to("cuda")`;
+CUDA cores and tensor cores may be used depending on the GPU, PyTorch build,
+input dtype, and matmul precision settings.
+
 Precise references:
 
 - [PyTorch CUDA semantics](https://docs.pytorch.org/docs/2.9/notes/cuda.html):
@@ -47,6 +53,12 @@ Implementation: `numpy_approach.py`
 conventional matrices and returns their matrix product. The heavy numerical
 work happens in compiled native code, not in a Python loop.
 
+Resource usage: this approach uses the CPU and system RAM. Python coordinates
+array creation and the function call, while NumPy performs the matrix
+multiplication in compiled CPU code. Depending on how NumPy was built, that CPU
+work may use optimized BLAS libraries, multiple CPU threads, vector/SIMD
+instructions, and CPU cache-aware kernels. It does not use the GPU.
+
 Precise references:
 
 - [NumPy `matmul`](https://numpy.org/doc/2.1/reference/generated/numpy.matmul.html):
@@ -71,6 +83,12 @@ right-hand matrix into columns, then computes every output cell as the dot
 product of one row and one column using `zip(..., strict=True)`, multiplication,
 and `sum()`. This path is intentionally direct: every scalar multiply/add is
 driven through Python-level iteration.
+
+Resource usage: this approach uses the CPU and system RAM through ordinary
+Python objects. The work is dominated by Python interpreter overhead, list
+accesses, generator iteration, floating-point object handling, and repeated
+calls into Python's runtime machinery. It does not use the GPU, BLAS, or
+vectorized native kernels for the core multiplication loop.
 
 Precise references:
 
