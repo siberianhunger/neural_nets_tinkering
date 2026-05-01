@@ -3,9 +3,10 @@ name = "neural-nets-tinkering"
 version = "0.1.0"
 description = "Small study project for learning neural networks and CUDA-backed tensor operations."
 readme = "README.md"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "numpy",
+    "ruff>=0.15.12",
     "torch",
 ]
 

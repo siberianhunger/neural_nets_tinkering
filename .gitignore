@@ -26,6 +26,9 @@ dist/
 htmlcov/
 coverage.xml
 
+# Manim render output
+media/
+
 # Local environment/config files
 .env
 .env.*

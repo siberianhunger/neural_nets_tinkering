@@ -14,7 +14,7 @@ approach converts or consumes those lists in its own way.
 
 ### CUDA/PyTorch approach
 
-Implementation: `cuda_approach.py`
+Implementation: `basic_matmul/cuda_approach.py`
 
 `cuda_multiply()` converts the nested Python lists into PyTorch tensors, moves
 them to the selected CUDA device with `.to("cuda")`, synchronizes the GPU before
@@ -46,7 +46,7 @@ Precise references:
 
 ### NumPy approach
 
-Implementation: `numpy_approach.py`
+Implementation: `basic_matmul/numpy_approach.py`
 
 `numpy_multiply()` converts the nested Python lists into NumPy arrays and calls
 `numpy.matmul(a, b)`. For two-dimensional arrays, NumPy treats the inputs as
@@ -76,7 +76,7 @@ Precise references:
 
 ### Raw Python approach
 
-Implementation: `raw_python_approach.py`
+Implementation: `basic_matmul/raw_python_approach.py`
 
 `raw_python_multiply()` keeps the data as Python lists. It first transposes the
 right-hand matrix into columns, then computes every output cell as the dot
